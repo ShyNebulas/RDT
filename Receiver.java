@@ -19,7 +19,7 @@ public class Receiver  extends TransportLayer{
     @Override
     public void rdt_receive(TransportLayerPacket pkt) {
         if (corrupt(pkt)) {
-            byte[] data = new byte[]{ (byte) 0};
+            byte[] data = new byte[1];
 rdt_send(data);
         } else {
             byte[] data = pkt.getData();
@@ -30,11 +30,5 @@ rdt_send(data);
     @Override
     public void timerInterrupt() {
 
-    }
-
-    public TransportLayerPacket makeAck(){
-
-        byte[] data = new byte[]{ (byte) 0};
-        return makePkt(data, makeChecksum(data));
     }
 }
