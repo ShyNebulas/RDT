@@ -1,3 +1,6 @@
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+
 public abstract class TransportLayer {
 
     String name;
@@ -18,5 +21,15 @@ public abstract class TransportLayer {
 
     public String getName() {
         return this.name;
+    }
+
+    public long makeChecksum(byte[] data){
+        Checksum checksum = new CRC32();
+        checksum.update(data);
+        return checksum.getValue();
+    }
+
+    public TransportLayerPacket makePkt(byte[] data){
+        return new TransportLayerPacket(data);
     }
 }

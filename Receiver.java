@@ -13,11 +13,13 @@ public class Receiver  extends TransportLayer{
     @Override
     public void rdt_send(byte[] data) {
 
+
     }
 
     @Override
     public void rdt_receive(TransportLayerPacket pkt) {
-
+        byte[] data = pkt.getData();
+        simulator.sendToApplicationLayer(this, data);
     }
 
     @Override

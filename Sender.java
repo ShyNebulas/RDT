@@ -11,7 +11,8 @@ public class Sender extends TransportLayer{
 
     @Override
     public void rdt_send(byte[] data) {
-
+        TransportLayerPacket pkt = makePkt(data);
+        simulator.sendToNetworkLayer(this, pkt);
     }
 
     @Override
