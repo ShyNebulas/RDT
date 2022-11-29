@@ -29,7 +29,13 @@ public abstract class TransportLayer {
         return checksum.getValue();
     }
 
-    public TransportLayerPacket makePkt(byte[] data){
-        return new TransportLayerPacket(data);
+    public TransportLayerPacket makePkt(byte[] data, long checksum){
+        return new TransportLayerPacket(data, checksum);
+    }
+
+    public boolean corrupt(TransportLayerPacket pkt){
+        long checksum = pkt.checksum;
+        long newChecksum = makeChecksum(pkt.getData());
+        return (checksum != newChecksum);
     }
 }
