@@ -6,29 +6,27 @@ public class Receiver  extends TransportLayer{
     }
 
     @Override
-    public void init() {
-
-    }
+    public void init(){}
 
     @Override
-    public void rdt_send(byte[] data) {
-        TransportLayerPacket pkt =  makePkt(data, makeChecksum(data));
-        simulator.sendToNetworkLayer(this, pkt);
-    }
+    public void rdt_send(byte[] data) {}
 
     @Override
     public void rdt_receive(TransportLayerPacket pkt) {
-        if (corrupt(pkt)) {
+        if (isCorrupt(pkt)) {
             byte[] data = new byte[1];
-rdt_send(data);
-        } else {
-            byte[] data = pkt.getData();
-            simulator.sendToApplicationLayer(this, data);
+            System.out.println("Data corrupted - making NAK");
+            TransportLayerPacket nakPkt = makePkt(data);
+            System.out.println("Sending NAK to network layer\n");
+            simulator.sendToNetworkLayer(this, nakPkt);
+        }
+        else{
+            simulator.sendToApplicationLayer(this, pkt.getData());
+            System.out.println("Sent to App Layer\n");
         }
     }
 
     @Override
     public void timerInterrupt() {
-
     }
 }

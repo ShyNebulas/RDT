@@ -2,14 +2,12 @@ public class TransportLayerPacket {
 
     // Maybe remove these
     // You may need extra fields
-
     int seqnum;
     int acknum;
     long checksum;
     byte[] data;
 
     // You may need extra methods
-
     public TransportLayerPacket(TransportLayerPacket pkt) {
       this.data = pkt.getData();
       this.seqnum = pkt.seqnum;
@@ -34,4 +32,5 @@ public class TransportLayerPacket {
         return data;
     }
 
+    public long getChecksum() {return checksum;}
 }

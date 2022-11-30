@@ -2,7 +2,6 @@ import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
 public abstract class TransportLayer {
-
     String name;
     NetworkSimulator simulator;
 
@@ -23,19 +22,30 @@ public abstract class TransportLayer {
         return this.name;
     }
 
+    /** Creates a new checksum and returns its value as a long
+     *
+     * @param data The data used in the checksums creation
+     *
+     */
     public long makeChecksum(byte[] data){
         Checksum checksum = new CRC32();
         checksum.update(data);
         return checksum.getValue();
     }
 
-    public TransportLayerPacket makePkt(byte[] data, long checksum){
-        return new TransportLayerPacket(data, checksum);
+    public TransportLayerPacket makePkt(byte[] data){
+        return new TransportLayerPacket(data, makeChecksum(data));
     }
 
-    public boolean corrupt(TransportLayerPacket pkt){
-        long checksum = pkt.checksum;
+    /**
+     * Checks if the actual checksum matches the correct checksum,
+     * if no then the packet was corrupted
+     * */
+    public boolean isCorrupt(TransportLayerPacket pkt){
+        long checksum = pkt.getChecksum();
         long newChecksum = makeChecksum(pkt.getData());
-        return (checksum != newChecksum);
+        System.out.println("Corruption checker\nCorrect Checksum: " + newChecksum + "\nActual Checksum: " + pkt.getChecksum() + "\n");
+        return (newChecksum != checksum);
     }
+
 }
