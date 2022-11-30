@@ -2,7 +2,6 @@ import java.util.ArrayList;
 public class Sender extends TransportLayer{
 
     ArrayList<byte[]> dataQueue;
-    boolean isFirst;
 
     public Sender(String name, NetworkSimulator simulator){
         super(name, simulator);
@@ -11,18 +10,18 @@ public class Sender extends TransportLayer{
     @Override
     public void init() {
         dataQueue = new ArrayList<>();
-        isFirst = true;
     }
 
     @Override
-    public void rdt_send(byte[] data) { //Add message to the queue and send it if it is the first message
+    public void rdt_send(byte[] data) { //Add message to the queue and send it
         dataQueue.add(data);
 
-        if (isFirst){
             TransportLayerPacket pkt = makePkt(dataQueue.get(0));
+        System.out.println("Sending to network layer\n");
             simulator.sendToNetworkLayer(this, pkt);
+
         }
-    }
+
 
     @Override
     public void rdt_receive(TransportLayerPacket pkt) {
@@ -35,15 +34,10 @@ public class Sender extends TransportLayer{
         else {
             dataQueue.remove(0);
             System.out.println("ACK Received by sender\n");
-            if (!dataQueue.isEmpty()) {
-                System.out.println("Making next packet");
-                TransportLayerPacket nextPkt = makePkt(dataQueue.get(0));
-                System.out.println("Sending to network layer\n");
-                simulator.sendToNetworkLayer(this, nextPkt);
             }
 
         }
-    }
+
 
     @Override
     public void timerInterrupt() {
